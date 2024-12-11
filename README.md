@@ -1,1 +1,1 @@
-"Segundo trabalho de programaá∆o concorrente, simulaá∆o de parque de atraá‰es" 
+"Segundo trabalho de programa√ß√£o concorrente, simula√ß√£o de parque de atra√ß√µes" 
