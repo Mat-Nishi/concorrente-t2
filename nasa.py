@@ -16,7 +16,7 @@ def main():
     PERMANENCIA = int(sys.argv[4])
     MAX_INTERVALO = int(sys.argv[5])
     SEMENTE = int(sys.argv[6])
-    UNID_TEMPO = int(sys.argv[7]) / 1000.0
+    UNID_TEMPO = int(sys.argv[7])
 
     tprint = time.time()
 
@@ -89,7 +89,7 @@ def main():
 
     def experiencia_pessoa(pessoa, experiencia, chegada):
         nonlocal ocupacao, tempo_funcionamento, pessoas_atendidas
-        tempo_espera = (time.time() - chegada) * 1000  #TODO verificar unidade de tempo
+        tempo_espera = (time.time() - chegada)
         with lock:
             tempos_espera[experiencia].append(tempo_espera)
         
@@ -116,7 +116,6 @@ def main():
         media = sum(tempos) / len(tempos) if tempos else 0
         print(f"{experiencia}: {media:.2f}")
 
-    # TODO calcular o tempo de funcionamento (atualmente eh sempre 0)
     taxa_ocupacao = tempo_funcionamento / tempo_total_simulacao if tempo_total_simulacao else 0
     print(f"\nTaxa de ocupacao: {taxa_ocupacao:.2f}")
 
