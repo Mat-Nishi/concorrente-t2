@@ -18,7 +18,7 @@ def main():
     SEMENTE = int(sys.argv[6])
     UNID_TEMPO = int(sys.argv[7]) / 1000.0
 
-    tprint = time.time() # DEBUG
+    tprint = time.time()
 
     # configurar a semente do rng
     random.seed(SEMENTE)
@@ -34,6 +34,7 @@ def main():
     tempo_funcionamento = 0
     tempos_espera = {f"AT-{i + 1}": [] for i in range(N_ATRACOES)}
     pessoas_atendidas = 0
+    inicio_atracao = 0
 
     # thread para gerar visitantes
     def gerador_pessoas():
@@ -47,7 +48,7 @@ def main():
 
     # thread responsavel por gerir a fila e liberar as threads a acessarem atracoes
     def gestor_atracao():
-        nonlocal experiencia_atual, ocupacao, tempo_funcionamento, tempo_total_simulacao, tprint, pessoas_atendidas
+        nonlocal experiencia_atual, ocupacao, tempo_funcionamento, tprint, pessoas_atendidas
 
         while True:
             with lock:
@@ -55,6 +56,8 @@ def main():
                     if experiencia_atual:
                         print(f"[NASA] Pausando a experiencia {experiencia_atual}.")
                         experiencia_atual = None
+                        tempo_funcionamento += (time.time()*int(bool(inicio_atracao))) - inicio_atracao
+                        inicio_atracao = 0
 
                     if pessoas_atendidas >= N_PESSOAS:
                         break
@@ -66,6 +69,7 @@ def main():
                         experiencia_atual = experiencia
 
                         if ocupacao == 0:
+                            inicio_atracao = time.time()
                             print(f"[NASA] Iniciando a experiencia {experiencia_atual}.")
 
                         if ocupacao < N_VAGAS:
@@ -79,12 +83,9 @@ def main():
                         continue
                 else:
                     if time.time() - tprint >= 0.5:
-                        # DEBUG
-                        print("-------- Fila vazia ----------", pessoas_atendidas)
                         tprint = time.time()
                     if pessoas_atendidas >= N_PESSOAS:
                         break
-            tempo_total_simulacao += UNID_TEMPO
 
     def experiencia_pessoa(pessoa, experiencia, chegada):
         nonlocal ocupacao, tempo_funcionamento, pessoas_atendidas
@@ -100,6 +101,7 @@ def main():
 
     # inicializa as threads
     print("[NASA] Simulacao iniciada.")
+    tempo_total_simulacao = time.time()
     gerador_thread = threading.Thread(target=gerador_pessoas)
     gerador_thread.start()
 
@@ -107,6 +109,7 @@ def main():
     gerador_thread.join()
 
     # calcula estatisticas
+    tempo_total_simulacao = time.time() - tempo_total_simulacao
     print("[NASA] Simulacao finalizada.")
     print("\nTempo medio de espera:")
     for experiencia, tempos in tempos_espera.items():
