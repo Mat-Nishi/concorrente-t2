@@ -13,12 +13,10 @@ def main():
     N_ATRACOES = int(sys.argv[1])
     N_PESSOAS = int(sys.argv[2])
     N_VAGAS = int(sys.argv[3])
-    PERMANENCIA = int(sys.argv[4])
+    PERMANENCIA = float(sys.argv[4])
     MAX_INTERVALO = int(sys.argv[5])
     SEMENTE = int(sys.argv[6])
-    UNID_TEMPO = int(sys.argv[7])
-
-    tprint = time.time()
+    UNID_TEMPO = float(sys.argv[7])
 
     # configurar a semente do rng
     random.seed(SEMENTE)
@@ -34,7 +32,6 @@ def main():
     tempo_funcionamento = 0
     tempos_espera = {f"AT-{i + 1}": [] for i in range(N_ATRACOES)}
     pessoas_atendidas = 0
-    inicio_atracao = 0
 
     # thread para gerar visitantes
     def gerador_pessoas():
@@ -48,7 +45,7 @@ def main():
 
     # thread responsavel por gerir a fila e liberar as threads a acessarem atracoes
     def gestor_atracao():
-        nonlocal experiencia_atual, ocupacao, tempo_funcionamento, tprint, pessoas_atendidas
+        nonlocal experiencia_atual, ocupacao, tempo_funcionamento, pessoas_atendidas
 
         while True:
             with lock:
@@ -82,8 +79,6 @@ def main():
                     else:
                         continue
                 else:
-                    if time.time() - tprint >= 0.5:
-                        tprint = time.time()
                     if pessoas_atendidas >= N_PESSOAS:
                         break
 
@@ -114,7 +109,7 @@ def main():
     print("\nTempo medio de espera:")
     for experiencia, tempos in tempos_espera.items():
         media = sum(tempos) / len(tempos) if tempos else 0
-        print(f"{experiencia}: {media:.2f}")
+        print(f"{experiencia}: {(media/UNID_TEMPO)*1000:.2f}")
 
     taxa_ocupacao = tempo_funcionamento / tempo_total_simulacao if tempo_total_simulacao else 0
     print(f"\nTaxa de ocupacao: {taxa_ocupacao:.2f}")
