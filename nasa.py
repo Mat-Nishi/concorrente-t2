@@ -53,7 +53,7 @@ def main():
                     if experiencia_atual:
                         print(f"[NASA] Pausando a experiencia {experiencia_atual}.")
                         experiencia_atual = None
-                        tempo_funcionamento += (time.time()*int(bool(inicio_atracao))) - inicio_atracao
+                        tempo_funcionamento += time.time() - inicio_atracao
                         inicio_atracao = 0
 
                     if pessoas_atendidas >= N_PESSOAS:
