@@ -13,10 +13,10 @@ def main():
     N_ATRACOES = int(sys.argv[1])
     N_PESSOAS = int(sys.argv[2])
     N_VAGAS = int(sys.argv[3])
-    PERMANENCIA = float(sys.argv[4])
+    PERMANENCIA = int(sys.argv[4])
     MAX_INTERVALO = int(sys.argv[5])
     SEMENTE = int(sys.argv[6])
-    UNID_TEMPO = float(sys.argv[7])
+    UNID_TEMPO = int(sys.argv[7])/1000
 
     # configurar a semente do rng
     random.seed(SEMENTE)
